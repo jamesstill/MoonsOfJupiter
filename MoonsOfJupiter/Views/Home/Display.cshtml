@@ -1,0 +1,80 @@
+﻿@model MoonsOfJupiter.Models.DateRangeViewModel
+
+@{
+    ViewData["Title"] = "Display";
+}
+
+<div>
+    <h2>Galilean Moons</h2>
+    From @Html.DisplayFor(m => m.StartDate) to @Html.DisplayFor(m => m.EndDate)
+</div>
+
+<div class="moon-display">
+    <table class="table table-borderless">
+        <tr>
+            <td class="col-xs-4"></td>
+            <td>@Html.DisplayFor(m => m.PositionsHeader)</td>
+        </tr>
+
+        @foreach(var date in Model.MoonsForDate)
+        {
+            <tr>
+                <td>@Html.DisplayFor(d => date.DateDisplay)</td>
+                <td>@Html.DisplayFor(d => date.OrientPositions)<strong> O </strong>@Html.DisplayFor(d => date.OccidentPositions)</td>
+            </tr>
+        }
+    </table>
+</div>
+
+<div>
+    <h3>Coordinate Details</h3>
+    <p>Galilean moons with (X,Y) coordinate locations for the date range.</p>
+</div>
+
+<div>
+    <table class="table table-bordered table-responsive-sm table">
+        <tr>
+            <td class="col-xs-4 text-left">
+                Date
+            </td>
+            <td class="col-xs-4 text-center">
+                Io (I)
+            </td>
+            <td class="col-xs-4 text-center">
+                Europa (E)
+            </td>
+            <td class="col-xs-4 text-center">
+                Ganymede (G)
+            </td>
+            <td class="col-xs-4 text-center">
+                Callisto (C)
+            </td>
+        </tr>
+        @foreach (var item in Model.MoonsForDate)
+        {
+            <tr>
+                <td class="col-xs-4">
+                    @Html.DisplayFor(m => item.DateDisplay)
+                </td>
+                <td class="col-xs-4">
+                    @Html.DisplayFor(m => item.Moons[0].CoordinateDisplay)
+                </td>
+                <td class="col-xs-4">
+                    @Html.DisplayFor(m => item.Moons[1].CoordinateDisplay)
+                </td>
+                <td class="col-xs-4">
+                    @Html.DisplayFor(m => item.Moons[2].CoordinateDisplay)
+                </td>
+                <td class="col-xs-4">
+                    @Html.DisplayFor(m => item.Moons[3].CoordinateDisplay)
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+
+<br/>
+
+<div>
+    <a class="btn btn-outline-primary" asp-action="Index" role="button">Start Over</a>
+</div>
