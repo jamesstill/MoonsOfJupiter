@@ -13,21 +13,19 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.100
-    - name: Build with dotnet
-      run: dotnet build --configuration Release
-    
-    -name: dotnet publish
-     run: |
-       dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/app
 
-    - name: Azure WebApp
+    - name: Build and Publish
+      run: dotnet build --configuration Release
+    - name: dotnet publish
+      run: |
+       dotnet publish -c Release -o ${{ env.DOTNET_ROOT }}/myapp
+
+    - name: Azure WebApp Deployment with Publish Profile Credentials
       uses: Azure/webapps-deploy@v1
       with:
         # Publish profile (*.publishsettings) file contents with Web Deploy secrets
         publish-profile: $${{ secrets.publishProfile }}
         # Name of the Azure Web App
-        app-name: 
+        app-name: MoonsOfJupiter
         # Path to package or folder. *.zip, *.war, *.jar or a folder to deploy
-        package: ${{env.DOTNET_ROOT}}/app
-        # Enter an existing Slot other than the Production slot
-        slot-name: # optional, default is production
+        package: ${{ env.DOTNET_ROOT }}/myapp
