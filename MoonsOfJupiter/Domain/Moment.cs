@@ -15,6 +15,17 @@ namespace MoonsOfJupiter.Domain
         public int Second { get; }
         public int Millisecond { get; }
 
+        public Moment(DateTime dt)
+        {
+            Year = dt.Year;
+            Month = dt.Month;
+            Day = dt.Day;
+            Hour = dt.Hour;
+            Minute = dt.Minute;
+            Second = dt.Second;
+            Millisecond = dt.Millisecond;
+        }
+
         /// <summary>
         /// Creates a Moment with known values down to the millisecond.
         /// </summary>
@@ -178,6 +189,22 @@ namespace MoonsOfJupiter.Domain
                 }
 
                 return Math.Floor(365.25 * (Y + 4716)) + Math.Floor(30.6001 * (M + 1)) + DayOfMonth + B - 1524.5;
+            }
+        }
+
+        public double JD
+        {
+            get
+            {
+                return JulianDay;
+            }
+        }
+
+        public double JDE
+        {
+            get
+            {
+                return JulianDay;
             }
         }
 

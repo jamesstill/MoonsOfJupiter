@@ -9,7 +9,7 @@ namespace MoonsOfJupiter.Models
 
         public string Symbol {  get
             {
-                return Name.Substring(0, 1);
+                return Name.Substring(0, 1).ToLower();
             } 
         }
 

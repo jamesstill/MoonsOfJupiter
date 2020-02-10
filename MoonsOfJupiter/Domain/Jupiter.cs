@@ -12,6 +12,17 @@ namespace MoonsOfJupiter.Domain
         }
 
         /// <summary>
+        /// Ephemeris from Chapter 43, p. 293
+        /// </summary>
+        public double T1 { 
+            get
+            {
+                double d = Moment.JDE - 2433282.5;
+                return d / 36525;
+            } 
+        }
+
+        /// <summary>
         /// Long-period term in the motion of Jupiter
         /// </summary>
         public Angle LongPeriodTerm

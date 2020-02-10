@@ -24,31 +24,30 @@ namespace MoonsOfJupiter.Models
 
         private static List<MoonViewModel> CalculateMoonPositionsForDate(DateTime dt)
         {
-            // using NASA formula for Year 2020
-            DateTime TD = dt.AddSeconds(dt.Year.ApproximateDeltaT());
-
-            Moment moment = new Moment(TD.Year, TD.Month, TD.Day, TD.Hour, TD.Minute, TD.Second, TD.Millisecond);
-
+            // assumes midnight on the date
+            Moment moment = new Moment(dt);
             Earth earth = new Earth(moment);
             Jupiter jupiter = new Jupiter(moment);
 
+            // calculate lower accuracy ephemerides for Jupiter and Earth
+
+            double d = moment.DayD;
             Angle V = jupiter.LongPeriodTerm;
             Angle J = jupiter.DeltaHeliocentricLongitudeEarthAndJupiter;
-
             Angle A = earth.EquationOfCenter;
             Angle B = jupiter.EquationOfCenter;
             Angle K = new Angle(J.Degrees + A.Degrees - B.Degrees);
+            
+            // R, r, and delta are distances expressed in astronomical units (AU)
             double R = earth.RadiusVector;
             double r = jupiter.RadiusVector;
 
             // distance from Earth to Jupiter in AU
             double delta = Math.Sqrt((r * r) + (R * R) - 2 * r * R * Math.Cos(K.Radians));
 
-            // phase angle of Jupiter
+            // phase angle of Jupiter; psi always lies between -12 and +12 degrees
             double psi = Math.Asin(R / delta * Math.Sin(K.Radians));
             Angle psiAngle = new Angle(psi.ToDegrees());
-
-            double d = moment.DayD - (delta / 173);
 
             // Jupiter's heliocentric longitude referred to the equinox of 2000.0
             double lambda = 34.35 + 0.083091 * d + 0.329 * Math.Sin(V.Radians) + B.Degrees;
@@ -58,7 +57,7 @@ namespace MoonsOfJupiter.Models
             double Ds = 3.12 * Math.Sin(lambdaAngle.Radians + 0.74700091985);
 
             // Jupiter's inclination of the equator on the ecliptic is 2.22 degrees
-            double Dx = 2.22 * Math.Sin(psiAngle.Radians) * Math.Cos(lambdaAngle.Radians + 0.38397243544); // should b e -0.350
+            double Dx = 2.22 * Math.Sin(psiAngle.Radians) * Math.Cos(lambdaAngle.Radians + 0.38397243544);
 
             // Jupiter's inclination of the orbital plane on the ecliptic is 1.30 degrees
             double Dy = 1.30 * ((r - delta) / delta) * Math.Sin(lambdaAngle.Radians - 1.7540558983);
@@ -68,25 +67,29 @@ namespace MoonsOfJupiter.Models
 
             // Chap 44 algorithms
 
+            // correction for light time in days; see p. 298
+            double t = delta / 173;
             double p = psiAngle.Degrees;
 
-            double u1 = 163.8069 + 203.4058646 * d + p - B.Degrees;
-            double u2 = 358.4140 + 101.2916335 * d + p - B.Degrees;
-            double u3 = 5.7176 + 50.2345180 * d + p - B.Degrees;
-            double u4 = 224.8092 + 21.4879800 * d + p - B.Degrees;
+            double u1 = 163.8069 + 203.4058646 * (d - t) + p - B.Degrees;
+            double u2 = 358.4140 + 101.2916335 * (d - t) + p - B.Degrees;
+            double u3 = 5.7176 + 50.2345180 * (d - t) + p - B.Degrees;
+            double u4 = 224.8092 + 21.4879800 * (d - t) + p - B.Degrees;
 
-            double G = 331.18 + 50.310482 * d;
-            double H = 87.45 + 21.569231 * d;
-            double corr1 = 2 * (u1 - u2);
-            double corr2 = 2 * (u2 - u3);
+            double G = 331.18 + 50.310482 * (d - t);
+            double H = 87.45 + 21.569231 * (d - t);
+            double corrU1 = 2 * (u1 - u2);
+            double corrU2 = 2 * (u2 - u3);
+
+            // these values don't correspond with example 12/16/1992
 
             u1 = u1.CorrectDegreeRange();
             u2 = u2.CorrectDegreeRange();
             u3 = u3.CorrectDegreeRange();
             u4 = u4.CorrectDegreeRange();
 
-            double r1 = 5.9057 - 0.0244 * Math.Cos(corr1.ToRadians());
-            double r2 = 9.3966 - 0.0882 * Math.Cos(corr2.ToRadians());
+            double r1 = 5.9057 - 0.0244 * Math.Cos(corrU1.ToRadians());
+            double r2 = 9.3966 - 0.0882 * Math.Cos(corrU2.ToRadians());
             double r3 = 14.9883 - 0.0216 * Math.Cos(G.ToRadians());
             double r4 = 26.3627 - 0.1939 * Math.Cos(H.ToRadians());
 
