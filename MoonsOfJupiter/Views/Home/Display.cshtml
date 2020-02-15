@@ -4,76 +4,81 @@
     ViewData["Title"] = "Display";
 }
 
-<div>
+<div class="text-center">
     <h2>Galilean Moons</h2>
     From @Html.DisplayFor(m => m.StartDate) to @Html.DisplayFor(m => m.EndDate) 0h UTC
 </div>
 
 <div class="moon-display">
-    <table class="table table-borderless">
+    <table class="table table-borderless text-monospace text-center small">
         <tr>
             <td class="col-xs-4"></td>
             <td>@Html.DisplayFor(m => m.PositionsHeader)</td>
         </tr>
 
-        @foreach(var date in Model.MoonsForDate)
+        @foreach (var date in Model.MoonsForDate)
         {
-            <tr>
-                <td>@Html.DisplayFor(d => date.DateDisplay)</td>
-                <td>@Html.DisplayFor(d => date.OrientPositions)<strong> O </strong>@Html.DisplayFor(d => date.OccidentPositions)</td>
-            </tr>
+        <tr>
+            <td>@Html.DisplayFor(d => date.DateDisplay)</td>
+            <td>@Html.DisplayFor(d => date.OrientPositions)<strong> O </strong>@Html.DisplayFor(d => date.OccidentPositions)</td>
+        </tr>
         }
     </table>
 </div>
 
-<div>
+<div class="text-center mb-2">
     <h3>Coordinate Details</h3>
     <p>Galilean moons with (X,Y) coordinate locations for the date range.</p>
+    <img src="~/coordinate-system.png" height="234" width="393" />
 </div>
 
 <div>
-    <table class="table table-bordered table-responsive-sm table">
-        <tr>
-            <td class="col-xs-4 text-left">
-                Date
-            </td>
-            <td class="col-xs-4 text-center">
-                Io (i)
-            </td>
-            <td class="col-xs-4 text-center">
-                Europa (e)
-            </td>
-            <td class="col-xs-4 text-center">
-                Ganymede (g)
-            </td>
-            <td class="col-xs-4 text-center">
-                Callisto (c)
-            </td>
-        </tr>
-        @foreach (var item in Model.MoonsForDate)
-        {
-            <tr>
-                <td class="col-xs-4">
-                    @Html.DisplayFor(m => item.DateDisplay)
-                </td>
-                <td class="col-xs-4">
-                    @Html.DisplayFor(m => item.Moons[0].CoordinateDisplay)
-                </td>
-                <td class="col-xs-4">
-                    @Html.DisplayFor(m => item.Moons[1].CoordinateDisplay)
-                </td>
-                <td class="col-xs-4">
-                    @Html.DisplayFor(m => item.Moons[2].CoordinateDisplay)
-                </td>
-                <td class="col-xs-4">
-                    @Html.DisplayFor(m => item.Moons[3].CoordinateDisplay)
-                </td>
-            </tr>
-        }
-    </table>
+  <table class="table table-sm table-striped table-hover text-monospace text-center small">
+      <thead>
+          <tr>
+              <th scope="col">
+                  Date
+              </th>
+              <th scope="col">
+                  Io (i)
+              </th>
+              <th scope="col">
+                  Europa (e)
+              </th>
+              <th scope="col">
+                  Ganymede (g)
+              </th>
+              <th scope="col">
+                  Callisto (c)
+              </th>
+          </tr>
+      </thead>
+      <tbody>
+          @foreach (var item in Model.MoonsForDate)
+      {
+          <tr>
+              <th scope="row">
+                  @Html.DisplayFor(m => item.DateDisplay)
+              </th>
+              <td>
+                  @Html.DisplayFor(m => item.Moons[0].CoordinateDisplay)
+              </td>
+              <td>
+                  @Html.DisplayFor(m => item.Moons[1].CoordinateDisplay)
+              </td>
+              <td>
+                  @Html.DisplayFor(m => item.Moons[2].CoordinateDisplay)
+              </td>
+              <td>
+                  @Html.DisplayFor(m => item.Moons[3].CoordinateDisplay)
+              </td>
+          </tr>
+      }
+      </tbody>
+  </table>
 </div>
 
-<br/>
+<br />
 
 <div>
     <a class="btn btn-outline-primary" asp-action="Index" role="button">Start Over</a>

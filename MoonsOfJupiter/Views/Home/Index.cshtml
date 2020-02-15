@@ -5,24 +5,24 @@
 
 <div class="text-center">
     <h1 class="display-4">Moons of Jupiter</h1>
+    <img src="~/jupiter.png" alt="Jupiter" height="168" width="168"/>
     <p>Pick a date range to see the positions of the four main Galilean moons.</p>
 </div>
 
-<div class="col-sm-6">
-    <form asp-action="Display">
-        <div class="form-group">
-            <label for="from" asp-for="StartDate">From</label>
-            <input id="from" name="StartDate" asp-for="StartDate" type="date" asp-format="{0:yyyy-MM-dd}" class="form-control">
+<div class="container h-100">
+    <div class="row h-100 justify-content-center align-items-center">
+        <div class="col-12 col-md-12 col-lg-6">
+            <form asp-action="Display" role="form">
+                <div class="form-group">
+                    <label for="from" asp-for="StartDate" class="col-sm-1">From</label>
+                    <input id="from" name="StartDate" asp-for="StartDate" type="date" asp-format="{0:yyyy-MM-dd}" class="form-control col-sm-4">
+                </div>
+                <div class="form-group">
+                    <label for="to" asp-for="EndDate" class="col-sm-1">To</label>
+                    <input id="to" name="EndDate" asp-for="EndDate" type="date" asp-format="{0:yyyy-MM-dd}" class="form-control col-sm-4">
+                </div>
+                <button type="submit" class="btn btn-primary">Display</button>
+            </form>
         </div>
-        <div class="form-group">
-            <label for="to" asp-for="EndDate">To</label>
-            <input id="to" name="EndDate" asp-for="EndDate" type="date" asp-format="{0:yyyy-MM-dd}" class="form-control">&nbsp;
-        </div>
-        <div class="form-group">
-            <input type="submit" value="Display" class="btn btn-primary" />
-        </div>
-    </form>
+    </div>
 </div>
-
-
-
