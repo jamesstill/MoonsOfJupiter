@@ -27,7 +27,7 @@ namespace MoonsOfJupiter.Models
         {
             get
             {
-                return " ".PadRight(20) + "EAST             WEST"; // display hack
+                return "EAST             WEST"; // display hack
             }
         }
     }

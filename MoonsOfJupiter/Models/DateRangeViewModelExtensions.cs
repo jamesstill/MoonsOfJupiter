@@ -69,27 +69,23 @@ namespace MoonsOfJupiter.Models
 
             // correction for light time in days; see p. 298
             double t = delta / 173;
-            double p = psiAngle.Degrees;
 
-            double u1 = 163.8069 + 203.4058646 * (d - t) + p - B.Degrees;
-            double u2 = 358.4140 + 101.2916335 * (d - t) + p - B.Degrees;
-            double u3 = 5.7176 + 50.2345180 * (d - t) + p - B.Degrees;
-            double u4 = 224.8092 + 21.4879800 * (d - t) + p - B.Degrees;
+            double u1 = 163.8069 + 203.4058646 * (d - t) + psiAngle.Degrees - B.Degrees;
+            double u2 = 358.4140 + (101.2916335 * (d - t)) + psiAngle.Degrees - B.Degrees;
+            double u3 = 5.7176 + (50.2345180 * (d - t)) + psiAngle.Degrees - B.Degrees;
+            double u4 = 224.8092 + (21.4879800 * (d - t)) + psiAngle.Degrees - B.Degrees;
 
-            double G = 331.18 + 50.310482 * (d - t);
-            double H = 87.45 + 21.569231 * (d - t);
-            double corrU1 = 2 * (u1 - u2);
-            double corrU2 = 2 * (u2 - u3);
-
-            // these values don't correspond with example 12/16/1992
-
+            // reduce to interval 0 to 360
             u1 = u1.CorrectDegreeRange();
             u2 = u2.CorrectDegreeRange();
             u3 = u3.CorrectDegreeRange();
             u4 = u4.CorrectDegreeRange();
 
-            double r1 = 5.9057 - 0.0244 * Math.Cos(corrU1.ToRadians());
-            double r2 = 9.3966 - 0.0882 * Math.Cos(corrU2.ToRadians());
+            double G = 331.18 + 50.310482 * (d - t);
+            double H = 87.45 + 21.569231 * (d - t);
+
+            double r1 = 5.9057 - 0.0244 * Math.Cos(2 * (u1 - u2).ToRadians());
+            double r2 = 9.3966 - 0.0882 * Math.Cos(2 * (u2 - u3).ToRadians());
             double r3 = 14.9883 - 0.0216 * Math.Cos(G.ToRadians());
             double r4 = 26.3627 - 0.1939 * Math.Cos(H.ToRadians());
 
